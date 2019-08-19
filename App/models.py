@@ -66,7 +66,6 @@ class Goods(models.Model):
     ginfo = models.TextField(default='暂无内容')
     # 商品类型
     gType = models.CharField(max_length=10, default='未指定')
-
     # 购买该商品的买家们（多对多）
     gbuyers = models.ManyToManyField(Buyer)
 

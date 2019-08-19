@@ -22,4 +22,10 @@ urlpatterns = [
     # path('getaccountbuyer/(\\d+)', views.GetAccountBuyer),
     url(r'^getbuyeraccount/(\d+)', views.GetBuyerAccount),
     url(r'^getaccountbuyer/(\d+)', views.GetAccountBuyer),
+    # buy/买家ID/商品ID
+    url(r'^buy/(\d+)/(\d+)', views.Buy),
+    # 查看买家购买的全部商品：路由的最后一段代表买家ID
+    url(r'^getbuyergoods/(\d+)', views.GetBuyerGoods),
+    # 查看商品的全部买家：理由最后一段代表商品的ID
+    url(r'^getgoodsbuyer/(\d+)', views.GetGoodsBuyer),
 ]

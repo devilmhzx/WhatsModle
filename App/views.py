@@ -53,3 +53,29 @@ def GetAccountBuyer(request, AccountId):
     a = Account.objects.get(pk=AccountId)
     ab = a.abuyer
     return HttpResponse('账户' + a.ano + '的买家是：' + ab.bname)
+
+
+def Buy(request, BuyerID, GoosID):
+    g = Goods.objects.get(pk=GoosID)
+    b = Buyer.objects.get(pk=BuyerID)
+    g.gbuyers.add(b)
+    g.save()
+    return HttpResponse(b.bname + '成功购买了一件' + g.gname + '!')
+
+
+def GetBuyerGoods(request, BuyerID):
+    b = Buyer.objects.get(pk=BuyerID)
+    gs = b.goods_set.all()
+    rt = ''
+    for g in gs:
+        rt += g.gname + ';'
+    return HttpResponse(b.bname + '购买了：' + rt)
+
+
+def GetGoodsBuyer(request, GoodsID):
+    g = Goods.objects.get(pk=GoodsID)
+    bs = g.gbuyers.all()
+    rt = ''
+    for b in bs:
+        rt += b.bname + ';'
+    return HttpResponse(g.gname + '的买家有：' + rt)
