@@ -39,3 +39,17 @@ def getGoos(request):
     for g in gs:
         rt += (g.gname + ';')
     return HttpResponse(rt)
+
+
+# 通过Buyer获得账户信息
+def GetBuyerAccount(request, BuyerId):
+    b = Buyer.objects.get(pk=BuyerId)
+    ba = b.account
+    return HttpResponse(b.bname + '的账号是' + ba.ano)
+
+
+# 通过账户获得买家信息
+def GetAccountBuyer(request, AccountId):
+    a = Account.objects.get(pk=AccountId)
+    ab = a.abuyer
+    return HttpResponse('账户' + a.ano + '的买家是：' + ab.bname)
