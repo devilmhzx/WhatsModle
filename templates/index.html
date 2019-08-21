@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index测试</title>
+</head>
+<body>
+{% for buyer in Buyer %}
+    <table>
+        <ul>
+            <li>买家名字为：{{ buyer.bname }}</li>
+            <li>买家年龄为：{{ buyer.bage }}</li>
+            <li>买家性别为：{{ buyer.GetGender }}</li>
+        </ul>
+    </table>
+{% endfor %}
+<hr>
+{% for good in Goods %}
+    <table>
+        <ul>
+            <li>商品名字为：{{ good.gname }}</li>
+            <li>商品价格为：{{ good.gprice }}</li>
+            <li>商品性别为：{{ good.ginfo }}</li>
+        </ul>
+    </table>
+{% endfor %}
+<br>
+
+</body>
+</html>

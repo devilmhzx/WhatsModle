@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^getbuyergoods/(\d+)', views.GetBuyerGoods),
     # 查看商品的全部买家：理由最后一段代表商品的ID
     url(r'^getgoodsbuyer/(\d+)', views.GetGoodsBuyer),
+    # 查询用户的订单，路由最后一段代表买家ID
+    url(r'^getbuyerorders/(\d+)', views.GetBuyerOrders),
 ]

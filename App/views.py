@@ -7,7 +7,14 @@ from App.models import *
 
 
 def index(request):
-    return HttpResponse('这是一个APP测试！')
+    b = Buyer.objects.all()
+    g = Goods.objects.all()
+
+    DataDirc = {
+        'Buyer': b,
+        'Goods': g,
+    }
+    return render(request, 'index.html', context=DataDirc)
 
 
 def addGoos(request):
@@ -56,11 +63,21 @@ def GetAccountBuyer(request, AccountId):
 
 
 def Buy(request, BuyerID, GoosID):
+    # 向商品的gbuyers添加一个新的买家
     g = Goods.objects.get(pk=GoosID)
     b = Buyer.objects.get(pk=BuyerID)
     g.gbuyers.add(b)
     g.save()
-    return HttpResponse(b.bname + '成功购买了一件' + g.gname + '!')
+
+    # 生成订单对象
+    o = Order()
+    o.omoney = g.gprice
+    o.obuyer = b
+    b.account.amoney -= o.omoney
+    o.oinfo = b.bname + '购买了' + g.gname + ',花了' + str(g.gprice) + '元！' + '剩余款项为：' + str(b.account.amoney)
+    b.save()
+    o.save()
+    return HttpResponse(b.bname + '成功购买了一件' + g.gname + '!' + o.oinfo)
 
 
 def GetBuyerGoods(request, BuyerID):
@@ -79,3 +96,12 @@ def GetGoodsBuyer(request, GoodsID):
     for b in bs:
         rt += b.bname + ';'
     return HttpResponse(g.gname + '的买家有：' + rt)
+
+
+def GetBuyerOrders(request, BuyerID):
+    b = Buyer.objects.get(pk=BuyerID)
+    os = b.order_set.all()
+    rt = ''
+    for i in os:
+        rt += i.oinfo + ';\n'
+    return HttpResponse(b.bname + '购买的订单为：' + rt)

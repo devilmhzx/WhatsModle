@@ -15,6 +15,14 @@ class Buyer(models.Model):
     # 职业
     bjob = models.CharField(max_length=20)
 
+    def GetGender(self):
+        if self.bgender == None:
+            return '不详'
+        elif self.bgender == True:
+            return '男'
+        else:
+            return '女'
+
     def __str__(self):
         return self.bname
 
@@ -22,19 +30,18 @@ class Buyer(models.Model):
 # 账户信息
 class Account(models.Model):
     # 账户
-    ano = models.CharField(max_length=20,unique=True)
+    ano = models.CharField(max_length=20, unique=True)
     # 余额
     amoney = models.FloatField(default=100)
     # 密码
-    apwd = models.CharField(max_length=20,default='111111')
+    apwd = models.CharField(max_length=20, default='111111')
     # 级别
     atype = models.CharField(max_length=10, default='普通用户')
-    # 买家-账户（一对一关系）
+    # 买家-账户（一对一关系）删除buyer时，会连带删除account
     abuyer = models.OneToOneField(Buyer, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.ano
-
 
 
 # 订单信息
@@ -59,7 +66,7 @@ class Order(models.Model):
 # 商品信息
 class Goods(models.Model):
     # 名称
-    gname = models.CharField(max_length=20,unique=True)
+    gname = models.CharField(max_length=20, unique=True)
     # 价格
     gprice = models.FloatField(default=0)
     # 详情
