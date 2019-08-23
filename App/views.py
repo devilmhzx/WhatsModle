@@ -105,3 +105,5 @@ def GetBuyerOrders(request, BuyerID):
     for i in os:
         rt += i.oinfo + ';\n'
     return HttpResponse(b.bname + '购买的订单为：' + rt)
+
+

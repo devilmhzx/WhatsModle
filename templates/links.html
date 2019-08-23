@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+    <li><a href="/news/get/李伟/30/女">位置参数</a></li>
+    <li><a href="/news/getkwargs/李伟/女/30">变量名参数</a></li>
+    <hr>
+    <li><a href="{% url 'newsns:getstr' '李伟' '36' '女' %}">位置参数路由</a></li>
+    <li><a href="{% url 'newsns:getKwargs' xingbie='女' age='36' name='李伟' %}">关键字参数路由</a></li>
+</ul>
+</body>
+</html>
