@@ -27,7 +27,19 @@ def register(request):
 
 
 def login(request):
-    return None
+    JsonData = {'returnJson': '登录失败', 'states': ['已退出', '已登陆']}
+    if request.method == 'GET':
+        return render(request, 'Login.html')
+    else:
+        uname = request.POST.get('uname', None)
+        upwd = request.POST.get('upwd', None)
+
+        user = UserRegister.objects.filter(uname=uname).first()
+        if user and upwd == user.upwd:
+            JsonData['returnJson'] = '登录成功'
+            JsonData['states'] = '已登录'
+        ReturnJson = JsonResponse(JsonData)
+        return ReturnJson
 
 
 def logout(request):
