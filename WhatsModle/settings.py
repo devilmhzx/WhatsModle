@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'App',
     'news',
+    'useradmin'
 ]
 
 MIDDLEWARE = [

@@ -8,7 +8,7 @@ def getarg(request, name, age, xingbie):
 
 
 def getKwargs(request, name, age, xingbie):
-    return HttpResponse('获取的资料为：姓名：%s，年龄：%s,性别：%s' % (name, age, xingbie))
+    return HttpResponse('获取的资料为：年龄：%s,姓名：%s，性别：%s' % (age, name, xingbie))
 
 
 def index(request):

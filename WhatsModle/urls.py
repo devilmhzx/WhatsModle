@@ -29,5 +29,7 @@ urlpatterns = [
     #  ————————————————
     # 版权声明：本文为CSDN博主「他说少年如歌」的原创文章，遵循CC 4.0 by-sa版权协议，转载请附上原文出处链接及本声明。
     # 原文链接：https://blog.csdn.net/qq_27437781/article/details/80436799
-    path('news/', include('news.urls', namespace='newsns'))
+    path('news/', include('news.urls', namespace='newsns')),
+    # 用户管理系统
+    path('useradmin/', include('useradmin.urls', namespace='useradmin')),
 ]
