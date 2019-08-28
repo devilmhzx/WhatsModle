@@ -1,10 +1,18 @@
+import io
+import os
 from datetime import timedelta
 
+import random
+
+from PIL import Image, ImageDraw, ImageFont
 from django.core.serializers import json
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
+
+
+from WhatsModle.settings import BASE_DIR
 from useradmin.models import *
 
 
@@ -15,7 +23,8 @@ def register(request):
     else:
         uname = request.POST.get('uname', None)
         upwd = request.POST.get('upwd', None)
-        print(uname, upwd)
+        vcode = request.POST.get('vcode', None)
+        print(uname, upwd, vcode)
 
         if uname and upwd:
             user = UserRegister()
@@ -70,3 +79,31 @@ def mine(request):
 
     uname = uname if uname != None else '你还未登录'
     return HttpResponse('你好，' + uname)
+
+
+# 生成并返回验证码
+def getvcode(request):
+    # 绘制验证码
+    # 创建画布
+    cr = random.randint(0, 255)
+    cg = random.randint(0, 255)
+    cb = random.randint(0, 255)
+
+    image = Image.new('RGB', (150, 50), color=(cr, cg, cb))
+    # 创建画布的画笔
+    draw = ImageDraw.Draw(image)
+    # 绘制文字
+    fontpath = os.path.join(BASE_DIR, 'static', 'font', 'A-OTF.otf')
+    ImageFont.truetype(font=fontpath, size=300)
+    randomfont = random.sample('abcdefghijklmnopqrstuvwxyz', 5)
+    tr = random.randint(0, 255)
+    tg = random.randint(0, 255)
+    tb = random.randint(0, 255)
+    draw.text((10, 10), ''.join(randomfont), fill=(tr, tg, tb), font=None)
+    # 返回验证码
+    # 创建字节容器
+    buffer = io.BytesIO()
+    # 将画布内容放入容器
+    image.save(buffer, 'png')
+    # 返回容器中的字节
+    return HttpResponse(buffer.getvalue(), 'image/png')
