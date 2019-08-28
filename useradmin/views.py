@@ -1,5 +1,6 @@
 import io
 import os
+import string
 from datetime import timedelta
 
 import random
@@ -25,15 +26,17 @@ def register(request):
         upwd = request.POST.get('upwd', None)
         vcode = request.POST.get('vcode', None)
         print(uname, upwd, vcode)
+        # 校验验证码
+        sessVcode = request.session.get('vcode', None)
 
-        if uname and upwd:
+        if uname and upwd and vcode and sessVcode and vcode.lower() == sessVcode.lower():
             user = UserRegister()
             user.uname = uname
             user.upwd = upwd
             user.save()
             JsonData['returnJson'] = '注册成功'
         else:
-            pass
+            JsonData['returnJson'] = '注册失败'
         ReturnJson = JsonResponse(JsonData['returnJson'], safe=False)
         return ReturnJson
 
@@ -84,6 +87,10 @@ def mine(request):
 # 生成并返回验证码
 def getvcode(request):
     # 绘制验证码
+    randomfont = random.sample(string.ascii_letters + string.digits, 4)
+    vcode = ''.join(randomfont)
+    # 保存该用户的验证码
+    request.session['vcode'] = vcode
     # 创建画布
     cr = random.randint(0, 255)
     cg = random.randint(0, 255)
@@ -94,12 +101,11 @@ def getvcode(request):
     draw = ImageDraw.Draw(image)
     # 绘制文字
     fontpath = os.path.join(BASE_DIR, 'static', 'font', 'A-OTF.otf')
-    ImageFont.truetype(font=fontpath, size=300)
-    randomfont = random.sample('abcdefghijklmnopqrstuvwxyz', 5)
+    ImageFont.truetype(font=fontpath, size=30)
     tr = random.randint(0, 255)
     tg = random.randint(0, 255)
     tb = random.randint(0, 255)
-    draw.text((10, 10), ''.join(randomfont), fill=(tr, tg, tb), font=None)
+    draw.text((10, 10), vcode, fill=(tr, tg, tb), font=None)
     # 返回验证码
     # 创建字节容器
     buffer = io.BytesIO()
