@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
@@ -10,6 +11,6 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('mine/', views.mine, name='mine'),
-
-    path('getcode/', views.getvcode, name='getcode')
+    # 使用url配合正则来随即生成链接
+    url(r'^getcode', views.getvcode, name='getcode')
 ]

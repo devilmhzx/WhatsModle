@@ -92,20 +92,27 @@ def getvcode(request):
     # 保存该用户的验证码
     request.session['vcode'] = vcode
     # 创建画布
-    cr = random.randint(0, 255)
-    cg = random.randint(0, 255)
-    cb = random.randint(0, 255)
+    # cr = random.randint(0, 255)
+    # cg = random.randint(0, 255)
+    # cb = random.randint(0, 255)
 
-    image = Image.new('RGB', (150, 50), color=(cr, cg, cb))
+    image = Image.new('RGB', (200, 75), color=getChangeColor())
     # 创建画布的画笔
     draw = ImageDraw.Draw(image)
     # 绘制文字
     fontpath = os.path.join(BASE_DIR, 'static', 'font', 'A-OTF.otf')
-    ImageFont.truetype(font=fontpath, size=30)
-    tr = random.randint(0, 255)
-    tg = random.randint(0, 255)
-    tb = random.randint(0, 255)
-    draw.text((10, 10), vcode, fill=(tr, tg, tb), font=None)
+    ifont = ImageFont.truetype(font=fontpath, size=40)
+    # tr = random.randint(0, 255)
+    # tg = random.randint(0, 255)
+    # tb = random.randint(0, 255)
+    randx = random.randint(40, 50)
+    # randy = random.randint(20,50)
+    for i in range(len(vcode)):
+        draw.text((20 + randx * i, random.randint(10, 35)), vcode[i], fill=getChangeColor(), font=ifont)
+
+    # 添加噪点
+    for i in range(800):
+        draw.point(getRangeInt(200, 75), getChangeColor())
     # 返回验证码
     # 创建字节容器
     buffer = io.BytesIO()
@@ -113,3 +120,16 @@ def getvcode(request):
     image.save(buffer, 'png')
     # 返回容器中的字节
     return HttpResponse(buffer.getvalue(), 'image/png')
+
+
+def getRangeInt(x, y):
+    randx = random.randint(0, x)
+    randy = random.randint(0, y)
+    return (randx, randy)
+
+
+def getChangeColor():
+    red = random.randint(0, 255)
+    green = random.randint(0, 255)
+    blue = random.randint(0, 255)
+    return (red, green, blue)
