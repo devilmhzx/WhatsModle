@@ -25,14 +25,17 @@ def register(request):
         uname = request.POST.get('uname', None)
         upwd = request.POST.get('upwd', None)
         vcode = request.POST.get('vcode', None)
+        # 获取注册时上传的头像文件
+        uicon = request.FILES.get('uicon',None)
         print(uname, upwd, vcode)
         # 校验验证码
         sessVcode = request.session.get('vcode', None)
 
-        if uname and upwd and vcode and sessVcode and vcode.lower() == sessVcode.lower():
+        if uname and uicon and upwd and vcode and sessVcode and vcode.lower() == sessVcode.lower():
             user = UserRegister()
             user.uname = uname
             user.upwd = upwd
+            user.uicon = uicon
             user.save()
             JsonData['returnJson'] = '注册成功'
         else:

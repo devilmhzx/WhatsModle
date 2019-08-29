@@ -15,10 +15,11 @@
     </script>
 </head>
 <body>
-<form action="{% url 'useradmin:register' %}" method="post">
+<form action="{% url 'useradmin:register' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="text" name="uname" placeholder="请输入用户名"><br>
-    <input type="password" name="upwd" placeholder=“请输入密码”><br>
+    <input type="text" name="uname" placeholder="请输入用户名" style="height: 25px;margin-bottom: 10px"><br>
+    <input type="text" name="upwd" placeholder=“请输入密码” style="height: 25px;margin-bottom: 10px"><br>
+    <input type="file" name="uicon" style="padding: 6px 0"><br>
     <img src="/useradmin/getcode" id="vcode"><br>
     <input type="text" name="vcode" placeholder=“请输入验证码”><br>
     <input type="submit" value="注册">
