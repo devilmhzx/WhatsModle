@@ -6,12 +6,13 @@ from datetime import timedelta
 import random
 
 from PIL import Image, ImageDraw, ImageFont
+from django.conf.global_settings import STATIC_URL
 from django.core.serializers import json
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
-
+from django.urls import reverse
 
 from WhatsModle.settings import BASE_DIR
 from useradmin.models import *
@@ -26,7 +27,7 @@ def register(request):
         upwd = request.POST.get('upwd', None)
         vcode = request.POST.get('vcode', None)
         # 获取注册时上传的头像文件
-        uicon = request.FILES.get('uicon',None)
+        uicon = request.FILES.get('uicon', None)
         print(uname, upwd, vcode)
         # 校验验证码
         sessVcode = request.session.get('vcode', None)
@@ -52,15 +53,24 @@ def login(request):
     else:
         uname = request.POST.get('uname', None)
         upwd = request.POST.get('upwd', None)
+        vcode = request.POST.get('vcode', None)
 
-        user = UserRegister.objects.filter(uname=uname).first()
-        if user and upwd == user.upwd:
-            JsonData['returnJson'] = '登录成功'
-            JsonData['states'] = '已登录'
-            # 通过客户端(cookie)保存用户状态
-            # httpRe.set_cookie('uname', uname, max_age=60)
-            httpRe.set_cookie('uname', uname, expires=timedelta(days=1))
-            # 让服务端通过session来保存用户状态
+        # 校验验证码
+        sessVode = request.session.get('vcode', None)
+        if vcode and sessVode and vcode.lower() == sessVode.lower():
+            user = UserRegister.objects.filter(uname=uname).first()
+            if user and upwd == user.upwd:
+                request.session['uname'] = uname
+                request.session['uicon'] = str(user.uicon)
+                print("UserRegister.uicon=",str(user.uicon))
+                JsonData['returnJson'] = '登录成功'
+                JsonData['states'] = '已登录'
+                JsonData['uname'] = uname
+
+                # 通过客户端(cookie)保存用户状态
+                # httpRe.set_cookie('uname', uname, max_age=60)
+                httpRe.set_cookie('uname', uname, expires=timedelta(days=1))
+                # 让服务端通过session来保存用户状态
 
         httpRe.content = JsonData.items()
         # ReturnJson = JsonResponse(JsonData)
@@ -80,11 +90,24 @@ def logout(request):
 
 def mine(request):
     # 从COOKIE中获取用户状态
-    uname = request.COOKIES.get('uname', None)
+    uname = request.session.get('uname', None)
+    uicon = request.session.get('uicon', None)
+    print('uicon=',uicon)
     # 从服务端session获取用户状态
+    # uname = uname if uname != None else '你还未登录'
+    if uname:
+        data = {
+            'uname': uname,
+            'uicon': '/static/uploadfiles/'+uicon
+        }
 
-    uname = uname if uname != None else '你还未登录'
-    return HttpResponse('你好，' + uname)
+        print('这里大字')
+        return render(request, 'mine.html', context=data)
+
+    else:
+        # 重定向
+        print("这里要跳转!")
+        return redirect(reverse('useradmin:login'))
 
 
 # 生成并返回验证码

@@ -3,13 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>登录页面</title>
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#vcode').click(function () {
+                $(this).attr('src', "/useradmin/getcode" + Math.random())
+            })
+
+        })
+    </script>
 </head>
 <body>
-<form action="{% url 'useradmin:login' %}" method="post">
+<form
+        action="{% url 'useradmin:login' %}"
+        method="post">
     {% csrf_token %}
-    <input type="text" name="uname" placeholder="请输入用户名"><br>
-    <input type="password" name="upwd" placeholder=“请输入密码”><br>
-    <input type="submit" value="登录">
+    <input
+            type="text"
+            name="uname"
+            placeholder="请输入用户名"
+            style="margin-bottom: 8px;"> <br>
+    <input
+            type="password"
+            name="upwd"
+            placeholder=“请输入密码”
+            style="margin-bottom: 8px;"><br>
+    <img
+            src="/useradmin/getcode"
+            id="vcode"> <br>
+    <input
+            type="text"
+            name="vcode"
+            placeholder=“请输入验证码”><br>
+    <input
+            type="submit"
+            value="登录">
 </form>
 </body>
 </html>
